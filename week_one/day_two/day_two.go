@@ -1,6 +1,7 @@
 package day_two
 
 import (
+	"crypto/ecdsa"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 )
@@ -20,4 +21,8 @@ func SignMessage(message string) ([]byte, error) {
 func RecoverKey(message string, signature []byte) ([]byte, error) {
 	messageHash := HashMessage(message)
 	return crypto.Ecrecover(messageHash.Bytes(), signature)
+}
+
+func GetAddress(publicKeyECDSA ecdsa.PublicKey) common.Address {
+	return crypto.PubkeyToAddress(publicKeyECDSA)
 }

@@ -11,7 +11,6 @@ import (
 
 var (
 	HelloWorldHex = "0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad"
-	SignedHex     = "0x04385c3a6ec0b9d57a4330dbd6284989be5bd00e41c535f9ca39b6ae7c521b81cd2443fef29e7f34aa8c8002eceaff422cd1f622bb4830714110e736044d8f084f"
 	msg           = "hello world"
 )
 
@@ -64,5 +63,22 @@ func TestRecoverMessage(t *testing.T) {
 		assert.Equal(t, nil, err)
 
 		assert.Equal(t, recoveredKey, publicKeyBytes)
+	})
+}
+
+func TestGetAddress(t *testing.T) {
+	var (
+		privateKey       = "6b911fd37cdf5c81d4c0adb1ab7fa822ed253ab0ad9aa18d77257c88b29b718e"
+		EXPECTED_ADDRESS = "0x16bB6031CBF3a12B899aB99D96B64b7bbD719705"
+	)
+	t.Run("Get Address", func(t *testing.T) {
+		pvtKey, _ := crypto.HexToECDSA(privateKey)
+		publicKey := pvtKey.Public()
+		publicKeyECDSA, _ := publicKey.(*ecdsa.PublicKey)
+		//publicKeyBytes := crypto.FromECDSAPub(publicKeyECDSA)
+
+		addr := day_two.GetAddress(*publicKeyECDSA)
+
+		assert.Equal(t, addr.String(), EXPECTED_ADDRESS)
 	})
 }
